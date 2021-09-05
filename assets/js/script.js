@@ -19,7 +19,7 @@ let startText = $("<p>Hello, Welcome to the quiz. This is text explaining the qu
 
 //create button el
 let answerButton = function(addId, ansText){
-    return $("<button>").attr("id", addId).addClass("btn btn-secondary btn-lg center col-12").text(ansText);
+    return $("<button>").attr("id", addId).addClass("ans-btn btn btn-secondary btn-lg center col-12").text(ansText);
 };
 
 //start quiz text
@@ -43,6 +43,13 @@ let userSelection = [];// keep track of T or F
 
 //countdown timer every second until user selects an answer. 
 let timer = 120;
+
+const displayWrong = function() {
+    rightOrWrong.replaceWith("Wrong Answer!")
+}
+const rightAnswer = function() {
+    rightOrWrong.replaceWith("Correct!")
+}
 
 //optional function rounds
 const roundGen = function(questArray) {
@@ -136,7 +143,7 @@ $("#ansBtnStart").click(function() {
     //add question to the page now need to replace the content
     let question1 = $("<p>" + displayQuestion(round1) + "</p>").addClass("question1 text-center");
     //console.log(typeof(question1)); expect a string
-    console.log("this is a question", question1);
+    //console.log("this is a question", question1);
     // question1.appendTo(questionSectionEl);
     $("#start-text").replaceWith(question1);
     //create answer button options
@@ -147,19 +154,30 @@ $("#ansBtnStart").click(function() {
     //answer two
     let ansBtn2 = answerButton("ans2", round1.a2)
     ansBtn2.appendTo(answerSectionEl);
-    let ansBtn3 = answerButton("ans2", round1.a3)
+    let ansBtn3 = answerButton("ans3", round1.a3)
     ansBtn3.appendTo(answerSectionEl);
-    let ansBtn4 = answerButton("ans2", round1.a4)
+    let ansBtn4 = answerButton("ans4", round1.a4)
     ansBtn4.appendTo(answerSectionEl);
+    let correctAns = round1.a5;
 });
-   //save error occurs TypeError question1.AddClass
-// document.querySelector('#ansBtnStart').addEventListener('click', function() {
-//     let question1 = $("<p>" + displayQuestion(round1) + "</p>"); // All I needed was to add jquery to the string
-//     //console.log(typeof(question1)); expect a string
-//     console.log("this is a question", question1);
-//     question1.addClass("question1 text-center").appendTo(questionSectionEl);
-// });
 
+$(answerSectionEl).on("click", "button", function(evt) {
+    // console.log("answer1 button has been clicked")
+    //if button text === ans 5 then correct. else if buttons then wrong.
+    let text = $(this).text();
+    //console.log(text);
+    let target = evt.target;
+    //console.log("you clicked", target);
+    if (text === round1.a5) {
+        console.log("this would be right");
+    }
+    else {
+        console.log("you are wrong")
+        displayWrong();
+    }
+    //
+
+});
 
 //test if display Answers is working
 // displayAnswers(round1);
