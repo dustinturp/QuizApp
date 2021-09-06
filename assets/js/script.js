@@ -22,6 +22,10 @@ let answerButton = function(addId, ansText){
     return $("<button>").attr("id", addId).addClass("ans-btn btn btn-secondary btn-lg center col-12").text(ansText);
 };
 
+let questionGen = function(addId, questText){
+    return $("<p>").attr("id", addId).addClass("question1 text-center").text(questText);
+};
+
 //start quiz text
 startText.addClass("text-center").appendTo(questionSectionEl);
 let startBtn = answerButton("ansBtnStart", "Start Quiz");
@@ -46,6 +50,8 @@ let timer = 120;
 
 const displayWrong = function() {
     rightOrWrong.replaceWith("Wrong Answer!")
+    timer = timer - 10;
+    console.log(timer);
 }
 const rightAnswer = function() {
     rightOrWrong.replaceWith("Correct!")
@@ -64,13 +70,9 @@ const roundGen = function(questArray) {
 
 //prints each round
 const round1 = questions[0];
-// // console.log(round1)
-// // console.log(round1.q)
-// // console.log(round1.a1)
-// const round2 = questions[1];
-// // console.log(round2)
-// const round3 = questions[2];
-// const round4 = questions[3];
+const round2 = questions[1];
+const round3 = questions[2];
+const round4 = questions[3];
 
 //function to take array and display it on the page
 function displayQuestion(array) {
@@ -88,11 +90,8 @@ function displayAnswers(array) {
     let answer1 = array.a1;
     console.log(answer1);
     let answer2 = array.a2;
-    // console.log(answer2);
     let answer3 = array.a3;
-    // console.log(answer3);
     let answer4 = array.a4;
-    // console.log(answer4);
     let correctA = array.a5;
     // return (answer1, answer2, answer3, answer4);
 };
@@ -100,18 +99,30 @@ function displayAnswers(array) {
 //collect answer chosen
 //if user selects 
 
-const startCountdown = setInterval(function() {
-    //when user clicks start game
-
+// $("#timer-el").on("click", function() 
+const countDownTimer = function() {
+    let date = new Date();
+    let time = date.toLocaleTimeString();
     let updatedTimer = timer --;
+    console.log(updatedTimer)
+    if(updatedTimer <= 0){
+        alert("Game Has Ended")
+        clearInterval(countDownTimer);
+        //end game
+    }
+    document.getElementById('timer-el').textContent = time + " time remaining " + updatedTimer;
+  // $("timer-el").replaceWith("Time Remaining" + updatedTimer)
+
+};
+
+//const startCountdown = setInterval(function() {
+    //when user clicks start game
+    
+
+    
     //push updated timer to screen and return it until user clicks next question.
     //timerEl = append timer + "seconds remaining";
 
-    // alert 
-
-    // one timer for the game.
-
-},1000);
 const pauseCountdown = function() { //check req only pause at end
     //when user clicks on an answer stop the timer.
     clearInterval(timer)
@@ -128,24 +139,21 @@ const pauseCountdown = function() { //check req only pause at end
 // display start game button fill content call round 1
 
     //on click of start quiz
-    // answerSectionEL = document.createElement("button");
-    // answerSectionEl.textContent = "Start Quiz";
-    // answerSectionEl.setAttribute("style", "margin:auto; width:50%; text-align:center;")
 const startQuiz = function() {
 
 }
 
 // start round 
-//startQuiz();
 
 //when start button is clicked display the question and buttons filled with answer choices.
 $("#ansBtnStart").click(function() {
     //add question to the page now need to replace the content
-    let question1 = $("<p>" + displayQuestion(round1) + "</p>").addClass("question1 text-center");
+    let question1 = $("<p>" + displayQuestion(round1) + "</p>").addClass("question1 text-center").attr('id', 'quest-one');
     //console.log(typeof(question1)); expect a string
     //console.log("this is a question", question1);
     // question1.appendTo(questionSectionEl);
     $("#start-text").replaceWith(question1);
+    $("#start-text").remove();
     //create answer button options
     //answer option1  
     let ansBtn1 = answerButton("ans1", round1.a1);
@@ -158,26 +166,62 @@ $("#ansBtnStart").click(function() {
     ansBtn3.appendTo(answerSectionEl);
     let ansBtn4 = answerButton("ans4", round1.a4)
     ansBtn4.appendTo(answerSectionEl);
-    let correctAns = round1.a5;
+    // let correctAns = round1.a5;
+    // let showCount = setInterval(countDownTimer, 1000)
 });
 
 $(answerSectionEl).on("click", "button", function(evt) {
-    // console.log("answer1 button has been clicked")
-    //if button text === ans 5 then correct. else if buttons then wrong.
     let text = $(this).text();
     //console.log(text);
     let target = evt.target;
     //console.log("you clicked", target);
     if (text === round1.a5) {
         console.log("this would be right");
+        rightAnswer();
+        // round2Begin();
+        //start round 2
     }
     else {
         console.log("you are wrong")
         displayWrong();
+        // round2Begin();
+        //start round 2
     }
-    //
-
+    roundCounter ++;
+    round2Begin()
 });
+
+// $("#quest-one").on("click", function(){
+//     let question2 = $("<p"> + round2.q + "</p>").addClass("question2 text-center");
+//     $("#quest-one").replaceWith(question2);
+//     console.log(question2);
+//     let r2AnsButton1 = round2.a1;
+// });
+
+const round2Begin = function() {
+    //display question 2
+    let question2 = questionGen("quest-2", round2.q)
+    console.log(question2);
+    $("#quest-one").replaceWith(question2);
+    //answer option display
+    ansBtn1 = answerButton("ans1", round2.a1);
+    $("#ans1").replaceWith(ansBtn1);
+    ansBtn1 = answerButton("ans2", round2.a2);
+    $("#ans2").replaceWith(ansBtn1);
+    ansBtn1 = answerButton("ans3", round2.a3);
+    $("#ans3").replaceWith(ansBtn1);
+    ansBtn1 = answerButton("ans4", round2.a4);
+    $("#ans4").replaceWith(ansBtn1);
+};
+
+
+
+
+
+
+
+
+
 
 //test if display Answers is working
 // displayAnswers(round1);
